@@ -1,0 +1,460 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Surveillance System</title>
+  <link rel="stylesheet" href="/static/css/base.css"/>
+  <link rel="stylesheet" href="/static/css/layout.css"/>
+  <link rel="stylesheet" href="/static/css/components.css"/>
+  <link rel="stylesheet" href="/static/css/dashboard.css"/>
+  <link rel="stylesheet" href="/static/css/faces.css"/>
+  <link rel="stylesheet" href="/static/css/settings.css"/>
+  <link rel="stylesheet" href="/static/css/alerts.css"/>
+  <link rel="stylesheet" href="/static/css/items.css"/>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">Sentinel</div>
+          <div class="brand-sub">Smart Surveillance</div>
+        </div>
+      </div>
+
+      <nav class="nav-item active" data-view="dashboard">
+        <span id="icon-dashboard"></span>
+        <span class="nav-label">Dashboard</span>
+      </nav>
+      <nav class="nav-item" data-view="faces">
+        <span id="icon-faces"></span>
+        <span class="nav-label">Faces</span>
+        <span class="nav-badge" id="nav-badge-faces">0</span>
+      </nav>
+      <nav class="nav-item" data-view="alerts">
+        <span id="icon-alerts"></span>
+        <span class="nav-label">Alerts</span>
+        <span class="nav-badge danger" id="nav-badge-alerts" style="display:none">0</span>
+      </nav>
+      <nav class="nav-item" data-view="items">
+        <span id="icon-items"></span>
+        <span class="nav-label">Items</span>
+        <span class="nav-badge danger" id="nav-badge-items" style="display:none">0</span>
+      </nav>
+      <nav class="nav-item" data-view="settings">
+        <span id="icon-settings"></span>
+        <span class="nav-label">Settings</span>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <span>System Online</span>
+      </div>
+    </aside>
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">Live Monitor</div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-meta">
+        <span id="icon-wifi" style="display:flex;align-items:center;gap:0.4rem"></span>
+        <span class="topbar-clock" id="topbar-clock">--:--:--</span>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="main">
+      <!-- Dashboard view -->
+      <section class="view active" id="view-dashboard">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Live Monitor</h1>
+            <div class="view-subtitle">Real-time detection, recognition, and threat alerts</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon success"><span id="icon-stat-user"></span></div>
+            </div>
+            <div class="stat-label">Persons</div>
+            <div class="stat-value" id="stat-persons">0</div>
+            <div class="stat-status" id="stat-persons-status">Clear</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon"><span id="icon-stat-phone"></span></div>
+            </div>
+            <div class="stat-label">Phones</div>
+            <div class="stat-value" id="stat-phones">0</div>
+            <div class="stat-status" id="stat-phones-status">Clear</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon purple"><span id="icon-stat-bag"></span></div>
+            </div>
+            <div class="stat-label">Bags</div>
+            <div class="stat-value" id="stat-bags">0</div>
+            <div class="stat-status" id="stat-bags-status">Clear</div>
+          </div>
+          <div class="stat-card" id="threat-card">
+            <div class="stat-header">
+              <div class="stat-icon danger"><span id="icon-stat-shield"></span></div>
+            </div>
+            <div class="stat-label">Threats</div>
+            <div class="stat-value" id="stat-threats">0</div>
+            <div class="stat-status active" id="stat-threats-status">Safe</div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div>
+            <div class="viewer">
+              <img class="viewer-stream" id="stream" src="/stream" alt="Live feed"/>
+              <div class="viewer-overlay">
+                <div class="viewer-overlay-tl">
+                  <div class="viewer-chip live"><span class="dot"></span>LIVE</div>
+                </div>
+                <div class="viewer-overlay-tr">
+                  <div class="viewer-chip"><span id="icon-overlay-cam"></span><span id="stream-camera">Camera 01</span></div>
+                </div>
+                <div class="viewer-overlay-bl">
+                  <div class="viewer-chip"><span id="icon-overlay-clock"></span><span id="stream-duration">00:00:00</span></div>
+                </div>
+                <div class="viewer-controls">
+                  <button class="viewer-btn" id="btn-screenshot" title="Screenshot"><span id="icon-btn-snap"></span></button>
+                  <button class="viewer-btn" id="btn-fullscreen" title="Fullscreen"><span id="icon-btn-fs"></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="side-panel">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><span id="icon-card-scan"></span>Live Recognition</div>
+              </div>
+              <div class="live-list" id="live-faces">
+                <div class="empty-state-text" style="padding:1rem">No faces detected</div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Faces view -->
+      <section class="view" id="view-faces">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Face Registry</h1>
+            <div class="view-subtitle">Register known persons and review auto-detected visitors</div>
+          </div>
+        </div>
+
+        <div class="faces-grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><span id="icon-reg"></span>Register New Face</div>
+            </div>
+            <div class="register-form">
+              <div class="form-group">
+                <label class="form-label" for="reg-name">Name</label>
+                <input type="text" id="reg-name" class="form-input" placeholder="e.g. Omar Ahmed"/>
+              </div>
+              <button class="btn btn-primary btn-block" onclick="faces.capture()">
+                <span id="icon-reg-cam"></span>Capture from Camera
+              </button>
+              <div id="reg-preview" class="preview-area hidden">
+                <img id="reg-preview-img" class="preview-img" alt="Preview"/>
+                <div class="preview-actions">
+                  <button class="btn btn-success" onclick="faces.register()"><span id="icon-reg-save"></span>Save</button>
+                  <button class="btn btn-ghost" onclick="faces.cancel()">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><span id="icon-known"></span>Known Faces</div>
+            </div>
+            <div class="person-list" id="known-list"></div>
+          </div>
+
+          <div class="card" style="grid-column: 1 / -1">
+            <div class="card-header">
+              <div class="card-title"><span id="icon-detected"></span>Detected Persons</div>
+              <span class="badge" id="detected-count">0 unique</span>
+            </div>
+            <div class="person-list" id="detected-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Alerts view -->
+      <section class="view" id="view-alerts">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Threat Alerts</h1>
+            <div class="view-subtitle">Real-time weapon detection, violence recognition, and proximity threats</div>
+          </div>
+          <div class="view-actions">
+            <span class="ws-status disconnected" id="ws-status">
+              <span class="ws-dot"></span><span class="ws-text">Disconnected</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="alerts-toolbar">
+          <div id="alerts-totals" class="alerts-totals" style="display:flex; gap:0.5rem; flex-wrap:wrap"></div>
+          <div class="alerts-filters">
+            <button class="filter-chip active" data-level="all">All</button>
+            <button class="filter-chip" data-level="critical">Critical</button>
+            <button class="filter-chip" data-level="high">High</button>
+            <button class="filter-chip" data-level="medium">Medium</button>
+            <button class="filter-chip" data-level="low">Low</button>
+            <button class="btn btn-ghost btn-sm" id="btn-clear-alerts" style="margin-left:0.5rem">Clear</button>
+          </div>
+        </div>
+
+        <div class="alerts-grid" id="alerts-list"></div>
+      </section>
+
+      <!-- Items view -->
+      <section class="view" id="view-items">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Item Tracking</h1>
+            <div class="view-subtitle">Live tracking, ownership history, and theft detection for personal items</div>
+          </div>
+          <div class="view-actions">
+            <span class="ws-status disconnected" id="items-ws-status">
+              <span class="ws-dot"></span><span class="ws-text">Disconnected</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="items-stats" id="items-stats">
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon success"><span id="icon-items-held"></span></div>
+            </div>
+            <div class="stat-label">Held</div>
+            <div class="stat-value" id="stat-items-held">0</div>
+            <div class="stat-status" id="stat-items-held-status">In use</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon"><span id="icon-items-stationary"></span></div>
+            </div>
+            <div class="stat-label">Stationary</div>
+            <div class="stat-value" id="stat-items-stationary">0</div>
+            <div class="stat-status" id="stat-items-stationary-status">On surface</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <div class="stat-icon purple"><span id="icon-items-abandoned"></span></div>
+            </div>
+            <div class="stat-label">Abandoned</div>
+            <div class="stat-value" id="stat-items-abandoned">0</div>
+            <div class="stat-status" id="stat-items-abandoned-status">Forgotten</div>
+          </div>
+          <div class="stat-card" id="items-theft-card">
+            <div class="stat-header">
+              <div class="stat-icon danger"><span id="icon-items-theft"></span></div>
+            </div>
+            <div class="stat-label">Thefts</div>
+            <div class="stat-value" id="stat-items-thefts">0</div>
+            <div class="stat-status active" id="stat-items-thefts-status">Safe</div>
+          </div>
+        </div>
+
+        <div class="items-toolbar">
+          <div class="items-filters">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="held">Held</button>
+            <button class="filter-chip" data-filter="stationary">Stationary</button>
+            <button class="filter-chip" data-filter="abandoned">Abandoned</button>
+            <button class="filter-chip" data-filter="owned">Owned</button>
+            <button class="filter-chip" data-filter="unowned">Unowned</button>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="btn-clear-items" style="margin-left:0.5rem">Clear</button>
+        </div>
+
+        <div class="items-grid">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><span id="icon-items-list"></span>Tracked Items</div>
+              <span class="badge" id="items-count">0 active</span>
+            </div>
+            <div class="items-table-wrap">
+              <table class="items-table" id="items-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>State</th>
+                    <th>Owner</th>
+                    <th>First Seen</th>
+                    <th>Last Seen</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="items-tbody">
+                  <tr><td colspan="7" class="empty-state-text">No items being tracked</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><span id="icon-items-timeline"></span>Event Timeline</div>
+              <span class="badge" id="events-count">0 events</span>
+            </div>
+            <div class="events-list" id="events-list">
+              <div class="empty-state-text">No events yet</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings view -->
+      <section class="view" id="view-settings">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">Settings</h1>
+            <div class="view-subtitle">Configure camera, stream quality, and system behavior</div>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <div class="card settings-section">
+            <div class="card-title"><span id="icon-set-rtsp"></span>RTSP Connection</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Host IP</label>
+                <input type="text" id="set-host" class="form-input" placeholder="192.168.1.7"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Port</label>
+                <input type="number" id="set-port" class="form-input" placeholder="554"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" id="set-user" class="form-input" placeholder="admin"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="set-pass" class="form-input" placeholder="password"/>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Channel</label>
+                <input type="number" id="set-channel" class="form-input" placeholder="101"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="card settings-section">
+            <div class="card-title"><span id="icon-set-stream"></span>Stream</div>
+            <div class="form-group">
+              <label class="form-label">JPEG Quality</label>
+              <div class="slider-row">
+                <input type="range" id="set-quality" class="slider" min="10" max="100" step="5" value="85"/>
+                <span class="slider-value" id="set-quality-val">85</span>
+              </div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-row-info">
+                <div class="toggle-row-label">Motion Detection</div>
+                <div class="toggle-row-help">Highlight moving objects in the frame</div>
+              </div>
+              <div class="toggle" id="set-motion"></div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-row-info">
+                <div class="toggle-row-label">Auto Recording</div>
+                <div class="toggle-row-help">Save clips when activity is detected</div>
+              </div>
+              <div class="toggle" id="set-recording"></div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-row-info">
+                <div class="toggle-row-label">Notifications</div>
+                <div class="toggle-row-help">Browser alerts on threat detection</div>
+              </div>
+              <div class="toggle" id="set-notifications"></div>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-row-info">
+                <div class="toggle-row-label">Night Vision</div>
+                <div class="toggle-row-help">Enhanced visibility in low light</div>
+              </div>
+              <div class="toggle" id="set-night"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-footer">
+          <button class="btn btn-ghost" id="set-reset">Reset</button>
+          <button class="btn btn-primary" id="set-save">Save Changes</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>/* injected icons */</script>
+  <script src="/static/js/utils.js"></script>
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/stream.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+  <script src="/static/js/faces.js"></script>
+  <script src="/static/js/settings.js"></script>
+  <script src="/static/js/alerts.js"></script>
+  <script src="/static/js/items.js"></script>
+  <script src="/static/js/app.js"></script>
+  <script>
+    // Hydrate all icon placeholders
+    const iconMap = {
+      "icon-dashboard": icon("monitor"),
+      "icon-faces": icon("users"),
+      "icon-alerts": icon("alert"),
+      "icon-settings": icon("settings"),
+      "icon-wifi": icon("wifi"),
+      "icon-stat-user": icon("user"),
+      "icon-stat-phone": icon("phone"),
+      "icon-stat-bag": icon("bag"),
+      "icon-stat-shield": icon("shield"),
+      "icon-overlay-cam": icon("camera"),
+      "icon-overlay-clock": icon("in"),
+      "icon-btn-snap": icon("capture"),
+      "icon-btn-fs": icon("expand"),
+      "icon-card-scan": icon("scan"),
+      "icon-reg": icon("plus"),
+      "icon-reg-cam": icon("camera"),
+      "icon-reg-save": icon("shieldCheck"),
+      "icon-known": icon("user"),
+      "icon-detected": icon("detect"),
+      "icon-set-rtsp": icon("camera"),
+      "icon-set-stream": icon("settings"),
+      "icon-items": icon("package"),
+      "icon-items-held": icon("hand"),
+      "icon-items-stationary": icon("package"),
+      "icon-items-abandoned": icon("clock"),
+      "icon-items-theft": icon("alert"),
+      "icon-items-list": icon("package"),
+      "icon-items-timeline": icon("clock"),
+    };
+    Object.entries(iconMap).forEach(([id, svg]) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = svg;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+/* Faces view */
+.faces-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+@media (max-width: 1000px) {
+  .faces-grid { grid-template-columns: 1fr; }
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.section-title-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.section-count {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+/* Register form */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.preview-area {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius);
+  border: 1px dashed var(--border-light);
+}
+
+.preview-img {
+  max-width: 320px;
+  max-height: 200px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: #000;
+}
+
+.preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Person list (shared) */
+.person-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.person-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all var(--transition);
+}
+
+.person-card:hover {
+  border-color: var(--border-light);
+  background: var(--bg-hover);
+}
+
+.person-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.person-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.person-avatar.known { background: var(--success-light); color: var(--success); }
+.person-avatar.auto { background: var(--orange-light); color: var(--orange); }
+
+.person-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.person-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.person-name.auto { color: var(--orange); }
+
+.person-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.person-actions {
+  display: flex;
+  gap: var(--space-1);
+}
